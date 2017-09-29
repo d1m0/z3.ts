@@ -47,3 +47,12 @@ cp $Z3_BUILD_OUT/libz3.so.js $BUILD_OUT
 
 echo "Building typescript..."
 tsc
+
+echo "Building test.html."
+tests=`find $TSC_BUILD_OUT/tests -name '*.js'`
+TAGS=""
+for file in $tests; do
+  TEST_PATH="ts/tests/"`basename $file`
+  TAGS+="<script type=\"text/javascript\" src=\"$TEST_PATH\"></script>"
+done
+cpp -P -DTEST_SCRIPT_TAGS="$TAGS" $DIR/templates/test.html.template > $BUILD_OUT/test.html

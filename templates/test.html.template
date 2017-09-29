@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <script type="text/javascript" src="ts/libz3.js"></script>
+    <script type='text/javascript'>
+      var testsRegistry = [
+      ]
+
+      function registerTest(name, func) {
+        testsRegistry.push([name, func])
+      }
+    </script>
+
+    TEST_SCRIPT_TAGS
+
+    <script type='text/javascript'>
+      var statusElement = document.getElementById('status');
+      var progressElement = document.getElementById('progress');
+
+      var Module = {
+        preRun: [],
+        postRun:  function() {
+          for (var i in testsRegistry) {
+            name = testsRegistry[i][0]
+            fun = testsRegistry[i][1]
+            try {
+              console.log("Run test ", name)
+              fun(Module)
+              console.log("Succeeded! ", name)
+            } catch (err) {
+              console.log("Test ", name, " failed ", err)
+            }
+          }
+        },
+        print: (function() {
+          return function(text) {
+            console.log(text);
+          };
+        })(),
+        printErr: function(text) {
+          console.error(text);
+        },
+        canvas: (function() {
+          return null;
+        })(),
+        setStatus: function(text) {
+          console.log('Status: ', text)
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        },
+      };
+      Module.setStatus('Downloading...');
+      window.onerror = function(event) {
+        // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+        Module.setStatus('Exception thrown, see JavaScript console');
+        Module.setStatus = function(text) {
+          if (text) Module.printErr('[post-exception status] ' + text);
+        };
+      };
+    </script>
+    <script async type="text/javascript" src="libz3.so.js"></script>
+  </body>
+</html>

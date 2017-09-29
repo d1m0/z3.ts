@@ -13,9 +13,6 @@
   },
   "exclude": [
   ],
-  "filesGlob": [
-    "ts/*.ts"
-  ],
   "formatCodeOptions": {
     "indentSize": 2,
     "tabSize": 4,
@@ -32,7 +29,10 @@
   },
   "files": [
     "ts/libz3.ts",
-    "ts/test.ts"
+    "ts/util.ts"
+  ],
+  "include": [
+    "ts/tests/*.ts"
   ],
   "atom": {
     "rewriteTsconfig": true
