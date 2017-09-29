@@ -1,0 +1,12 @@
+{
+  "name": "z3.ts",
+  "version": "0.0.0",
+  "description": "",
+  "devDependencies": {
+    "typescript": "1.8",
+    "types": "0.1.1"
+  },
+  "dependencies": {
+    "@types/webassembly-js-api": "0.0.1"
+  }
+}
