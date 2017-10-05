@@ -28,6 +28,7 @@
     "placeOpenBraceOnNewLineForControlBlocks": false
   },
   "files": [
+    "ts/ctypes.ts",
     "ts/libz3.ts",
     "ts/util.ts"
   ],
