@@ -26,10 +26,10 @@ check_has "emcc" "Please install and activate Emscripten (run emsdk_env.sh)"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 Z3_BUILD_OUT=$DIR/z3/build/
 TSC_BUILD_OUT=$DIR/build/ts/
-Z3_API_FUNCS="\"['_Z3_mk_config', '_Z3_mk_context', '_Z3_mk_solver', '_Z3_mk_int_symbol', '_Z3_mk_int_sort', '_Z3_mk_eq', '_Z3_mk_not', '_Z3_solver_assert', '_Z3_solver_check', '_Z3_mk_const']\""
+source "$DIR/api_entries.sh"
 WASM_MEM=33554432  # 32MB
 
-MY_CFLAGS='-s WASM=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0'
+MY_CFLAGS='-s WASM=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 -s NO_EXIT_RUNTIME=1'
 
 # 3. Configure z3 build
 pushd $DIR/z3
