@@ -49,11 +49,6 @@ type Z3_solver = voidp;
 type Z3_func_interp = voidp;
 type Z3_apply_result = voidp;
 
-interface WasmJSInstance extends WebAssembly.Instance {
-  ccall(fname: string, returnType: string, argTypes: string[], args: any[]): any;
-}
-
-
 class LibZ3 {
   constructor(private wasmInstance: WasmJSInstance) { }
 

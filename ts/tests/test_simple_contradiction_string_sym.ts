@@ -1,4 +1,4 @@
-registerTest("basic", function test(wasmInstance: WasmJSInstance) {
+registerTest("simple_contradiction_string", function test(wasmInstance: WasmJSInstance) {
   var lib: LibZ3 = new LibZ3(wasmInstance)
   var config: Z3_config = lib.Z3_mk_config()
   console.log("config: ", config)
@@ -8,11 +8,11 @@ registerTest("basic", function test(wasmInstance: WasmJSInstance) {
   console.log("solver: ", solver)
   var int_sort: Z3_sort = lib.Z3_mk_int_sort(context)
   console.log("int_sort: ", int_sort)
-  var s1: Z3_symbol = lib.Z3_mk_int_symbol(context, 1)
+  var s1: Z3_symbol = lib.Z3_mk_string_symbol(context, "a")
   console.log("s1: ", s1)
   var c1: Z3_ast = lib.Z3_mk_const(context, s1, int_sort)
   console.log("c1: ", c1)
-  var s2: Z3_symbol = lib.Z3_mk_int_symbol(context, 2)
+  var s2: Z3_symbol = lib.Z3_mk_string_symbol(context, "b")
   console.log("s2: ", s2)
   var c2: Z3_ast = lib.Z3_mk_const(context, s2, int_sort)
   console.log("c2: ", c2)
