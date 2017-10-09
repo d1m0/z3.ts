@@ -29,7 +29,7 @@ TSC_BUILD_OUT=$DIR/build/ts/
 source "$DIR/api_entries.sh"
 WASM_MEM=33554432  # 32MB
 
-MY_CFLAGS='-s WASM=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 -s NO_EXIT_RUNTIME=1'
+MY_CFLAGS='-s WASM=1 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0 -s NO_EXIT_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1 -O2'
 
 # 3. Configure z3 build
 pushd $DIR/z3
@@ -48,7 +48,7 @@ sed -i "1 i\Z3_API_FUNCS=$Z3_API_FUNCS" config.mk
 sed -i "s/SO_EXT=.so/SO_EXT=.so.js/" config.mk
 sed -i "s/EXE_EXT=/EXE_EXT=.js/" config.mk
 sed -i "s/LINK_FLAGS=.*/LINK_FLAGS=-s WASM=1 -O3/" config.mk
-sed -i "s/SLINK_FLAGS=.*/SLINK_FLAGS=-shared -s WASM=1 -s EXPORTED_FUNCTIONS=\$(Z3_API_FUNCS) -O3 -s TOTAL_MEMORY=$WASM_MEM -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0/" config.mk
+sed -i "s/SLINK_FLAGS=.*/SLINK_FLAGS=-shared -s WASM=1 -s EXPORTED_FUNCTIONS=\$(Z3_API_FUNCS) -O2 -s ASSERTIONS=1 -s DISABLE_EXCEPTION_CATCHING=0/" config.mk
 popd
 
 mkdir -p $TSC_BUILD_OUT

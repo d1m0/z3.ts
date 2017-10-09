@@ -30,7 +30,8 @@
   "files": [
     "ts/ctypes.ts",
     "ts/libz3.ts",
-    "ts/util.ts"
+    "ts/util.ts",
+    "ts/wasmInstance.ts"
   ],
   "include": [
     "ts/tests/*.ts"

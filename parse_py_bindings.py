@@ -85,13 +85,6 @@ for t, (ts_name, ts_type) in mapping.items():
 
 print \
 """
-interface WasmJSInstance extends WebAssembly.Instance {
-  ccall(fname: string, returnType: string, argTypes: string[], args: any[]): any;
-}
-"""
-
-print \
-"""
 class LibZ3 {
   constructor(private wasmInstance: WasmJSInstance) { }
 
