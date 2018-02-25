@@ -38,7 +38,7 @@ fi
 
 pushd $Z3_BUILD_OUT
 echo "Building z3..."
-make
+make -j 8
 popd
 
 echo "Moving WASM libz3.so from $Z3_BUILD_OUT to $BUILD_OUT"
