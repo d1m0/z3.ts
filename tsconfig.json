@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "declaration": false,
-    "module": "amd",
+    "module": "es6",
     "noImplicitAny": false,
     "noLib": false,
     "outDir": "build",
