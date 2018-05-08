@@ -1,5 +1,6 @@
-import {LibZ3, Z3_config, Z3_context, Z3_solver, Z3_sort, Z3_symbol, Z3_ast, Z3_lbool} from "libz3"
+import {LibZ3, Z3_config, Z3_context, Z3_solver, Z3_sort, Z3_symbol, Z3_ast, Z3_lbool} from "../libz3"
 import {WasmJSInstance} from "../wasmInstance"
+import {assert} from "../util"
 
 registerTest("simple_contradiction_string", function test(wasmInstance: WasmJSInstance) {
   var lib: LibZ3 = new LibZ3(wasmInstance)

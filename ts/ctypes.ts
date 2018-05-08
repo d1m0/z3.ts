@@ -1,3 +1,4 @@
+import {assert} from "util"
 type WasmHeap = DataView;
 
 export abstract class CType {
@@ -28,16 +29,11 @@ abstract class NumberCType implements CType {
   abstract max(): number;
 
   constructor(arg: number) {
-    assert (arg >= this.min() && arg <= this.max());
+    assert (arg >= this.min() && arg <= this.max(),
+      "Bad number " + arg + " out of range [" + this.min() + "," + this.max() + "]");
     this._val = arg;
   }
   val(): number { return this._val; };
-}
-
-function assert(b: boolean): void {
-  if (!b) {
-    throw new Error("assert");
-  }
 }
 
 export class Uint8 extends NumberCType {
@@ -82,7 +78,7 @@ export class Sint16 extends NumberCType {
 
 export class Uint32 extends NumberCType {
   min(): number { return 0 };
-  max(): number { return (1<<32-1); };
+  max(): number { return (1<<30) + (1<<30) + (1<<30) + ((1<<30) - 1); };
   static sizeof(): number { return 32 };
   static from_heap(heap: WasmHeap, off: number): Uint32
   {
@@ -92,8 +88,8 @@ export class Uint32 extends NumberCType {
 
 export class Sint32 extends NumberCType {
   sizeof(): number { return 32 };
-  min(): number { return -(1<<31); };
-  max(): number { return (1<<31)-1; };
+  min(): number { return -((1<<30) + (1<<30)); };
+  max(): number { return ((1<<30) + ((1<<30)-1)); };
   static sizeof(): number { return 32 };
   static from_heap(heap: WasmHeap, off: number): Sint32
   {
@@ -144,51 +140,18 @@ export class Double extends NumberCType {
   }
 }
 
-export class Ptr<U extends CType> extends Uint32 {
-  private _heap: WasmHeap;
-  private _typ: CTypeClass<U>;
-
-  constructor(arg: number, heap: WasmHeap, typ: CTypeClass<U>) {
-    super(arg);
-    this._heap = heap;
-    this._typ = typ;
+export class Ptr extends Uint32 {
+  deref<U>(heap: WasmHeap, typ: CTypeClass<U>): U {
+    return typ.from_heap(heap, this._val);
   }
 
-  deref(): U {
-    return this._typ.from_heap(this._heap, this._val);
-  }
-
-  index(idx: number): this {
-    let new_addr = this._val + idx * this._typ.sizeof();
-    return this.constructor(new_addr, this._heap, this._typ);
-  }
-
-  heap(): WasmHeap {
-    return this._heap;
-  }
-
-  static nullPtr<T extends CType>(typ: CTypeClass<T>, heap?: WasmHeap): Ptr<T> {
-    if (heap === undefined) {
-      heap = null;
-    }
-
-    return new Ptr<T>(0, heap, typ);
+  static nullPtr(): Ptr {
+    return new Ptr(0);
   }
 }
 
-export class CString extends Ptr<Uint8> {
-  constructor(arg: number, heap: WasmHeap) {
-    super(arg, heap, Uint8);
-  }
-
+export class CString extends Ptr {
   str(): string {
     return "TODO";
   }
 }
-
-export type u8 = Uint8;
-export type voidp = Ptr<Void>;
-export type voidp_arr = Ptr<Ptr<Void>>;
-export type u32_arr = Ptr<Uint32>;
-export type i32_arr = Ptr<Sint32>;
-export type str_arr = Ptr<Ptr<Uint8>>;
