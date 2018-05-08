@@ -48,11 +48,21 @@ cp $Z3_BUILD_OUT/libz3.so.js $BUILD_OUT
 echo "Building typescript..."
 tsc
 
+echo "Fetching require.js..."
+if [ ! -e $BUILD_OUT/require.js ] ; then
+  wget http://requirejs.org/docs/release/2.3.5/comments/require.js -O $BUILD_OUT/require.js
+fi
+
 echo "Building test.html."
 tests=`find $TSC_BUILD_OUT/tests -name '*.js'`
 TAGS=""
+TEST_PATH_MAPS=""
+TEST_FILES=""
 for file in $tests; do
-  TEST_PATH="ts/tests/"`basename $file`
-  TAGS+="<script type=\"text/javascript\" src=\"$TEST_PATH\"></script>"
+  FILE_NAME=`basename $file .js`
+  TEST_PATH="ts/tests/"`basename $file .js`
+  TEST_PATH_MAPS+="\"$FILE_NAME\": \"$TEST_PATH\","
+  TEST_FILES+="\"$FILE_NAME\","
 done
-cpp -P -DTEST_SCRIPT_TAGS="$TAGS" $DIR/templates/test.html.template > $BUILD_OUT/test.html
+cpp -P -DTEST_PATHS_MAP="$TEST_PATH_MAPS" -DTEST_FILES="$TEST_FILES" $DIR/templates/loader.js.template > $BUILD_OUT/loader.js
+cpp -P -DTEST_PATHS_MAP="$TEST_PATH_MAPS" -DTEST_FILES="$TEST_FILES" $DIR/templates/test.html.template > $BUILD_OUT/test.html
